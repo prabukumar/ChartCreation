@@ -1,0 +1,235 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Fipsar Demo</title>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="Styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+        function btnGetAllDiseases() {
+            document.getElementById("BeginDiseasechartContainer").style.display = "block";
+            document.getElementById("IncomTreatchartContainer").style.display = "block";
+            document.getElementById("CompTreatchartContainer").style.display = "block";
+            var AllDiseaseDet = [];
+            var BeginTreat = [];
+            var InComTreat = [];
+            var CompTreat = [];
+            fetch('http://localhost:50269/api/ReactJS/GetAllDiseaseDetails', { method: 'GET' })
+                .then(Response => {
+                    return Response.json();
+                }).then(data => {
+                    var jsondata = JSON.parse(data)
+                    for (var i = 0; i < jsondata.length; i++) {
+                        AllDiseaseDet.push({
+                            label: jsondata[i].DiseaseName,
+                            y: jsondata[i].TotalDiseaseCount
+                        });
+                        BeginTreat.push({
+                            label: jsondata[i].DiseaseName,
+                            y: jsondata[i].BeginTreatment
+                        });
+                        InComTreat.push({
+                            label: jsondata[i].DiseaseName,
+                            y: jsondata[i].notcompletedTreatment
+                        });
+                        CompTreat.push({
+                            label: jsondata[i].DiseaseName,
+                            y: jsondata[i].CompletedTreatment
+                        });
+                    }
+                    var DiseaseDetails = new CanvasJS.Chart("chartContainer", {
+                        animationEnabled: true,
+                        backgroundColor: "transparent",
+                        title: {
+                            text: "Diseases Details"
+                        },
+                        data: [
+                            {
+                                type: "pie",
+                                dataPoints: AllDiseaseDet
+                            }
+                        ]
+                    });
+                    DiseaseDetails.render();
+                    var BeginDetails = new CanvasJS.Chart("BeginDiseasechartContainer", {
+                        animationEnabled: true,
+                        backgroundColor: "transparent",
+                        title: {
+                            text: "Begin Treatment Diseases Details"
+                        },
+                        data: [
+                            {
+                                type: "column",
+                                dataPoints: BeginTreat
+                            }
+                        ]
+                    });
+                    BeginDetails.render();
+                    var InCompTreatDetails = new CanvasJS.Chart("IncomTreatchartContainer", {
+                        animationEnabled: true,
+                        backgroundColor: "transparent",
+                        title: {
+                            text: "Incomplete Treatment Diseases Details"
+                        },
+                        data: [
+                            {
+                                type: "line",
+                                dataPoints: InComTreat
+                            }
+                        ]
+                    });
+                    InCompTreatDetails.render();
+                    var CompTreatDetails = new CanvasJS.Chart("CompTreatchartContainer", {
+                        animationEnabled: true,
+                        backgroundColor: "transparent",
+                        title: {
+                            text: "Treatment completed Diseases Details"
+                        },
+                        data: [
+                            {
+                                type: "doughnut",
+                                dataPoints: CompTreat
+                            }
+                        ]
+                    });
+                    CompTreatDetails.render();
+
+                }).catch(err => {
+                    console.log(err);
+                });
+        }
+        function isEmpty(obj) {
+            for (var key in obj) {
+                if (obj.hasOwnProperty(key))
+                    return false;
+            }
+            return true;
+        }
+        function GetByDisease(diseaseName) {
+            if (diseaseName == "") {
+                alert("Please enter the disease name")
+                return false;
+            }
+            var diseaseDet = [];
+            var DiseaseHead = [];
+            fetch('http://localhost:50269/api/ReactJS/GetByDisease?disease=' + diseaseName, {
+                method: 'GET'
+            }).then(Response => {
+                return Response.json();
+            }).then(data => {
+                var jsondata = JSON.parse(data), key;
+                if (isEmpty(jsondata))
+                    alert("Please enter valid disease")
+                else {
+                    for (var i = 0; i < jsondata.length; i++) {
+                        for (key in jsondata[i]) {
+                            if (jsondata[i].hasOwnProperty(key)) {
+                                if (key == "DiseaseName" || key == "TotalDiseaseCount") {
+                                    DiseaseHead.push({
+                                        label: key,
+                                        y: jsondata[i][key]
+                                    })
+                                }
+                                else {
+                                    diseaseDet.push({
+                                        label: key,
+                                        y: jsondata[i][key]
+                                    })
+                                }
+                            }
+                        }
+                    }
+                    var DiseaseDetails = new CanvasJS.Chart("chartContainer", {
+                        animationEnabled: true,
+                        backgroundColor: "transparent",
+                        title: {
+                            text: diseaseName + " Details"
+                        },
+                        data: [
+                            {
+                                type: "column",
+                                dataPoints: diseaseDet
+                            }
+                        ]
+                    });
+                    DiseaseDetails.render();
+                    document.getElementById("BeginDiseasechartContainer").style.display = "none";
+                    document.getElementById("IncomTreatchartContainer").style.display = "none";
+                    document.getElementById("CompTreatchartContainer").style.display = "none";
+                }
+            }).catch(err => {
+                console.log(err);
+            });
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-light button">
+        <div class="navbar-header">
+            <a class="navbar-brand first_logo" href="demo.html"><img src="./image/first.png" /></a>
+        </div>
+        <ul class="navbar-nav margin-top-1" id="nav-button">
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="demo.html">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 1</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 2</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 3</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 4</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 5</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 6</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 7</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 8</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 9</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button nav-padding" href="ChartCreation.html">Page 10</a>
+            </li>
+        </ul>
+    </nav>
+    <div style="height:5px">
+
+    </div>
+    <div class="col-md-3 margin-bottom-2">
+        <form>
+            <input class="form-control" id="txtDiseaseName" type="text" placeholder="Search..">
+        </form>
+    </div>
+    <div>
+        <button id="btnGetByDisease" class="btn btn-primary button" onclick="GetByDisease(document.getElementById('txtDiseaseName').value)">Get By Disease Name</button>
+
+        <button id="btnGetDesease" class="btn btn-primary button" onclick="btnGetAllDiseases()">Get All Disease Details</button>
+    </div>
+    <div id="chartContainer" style="width:595px;height:400px">
+    </div>
+
+    <div id="BeginDiseasechartContainer" style="width:595px;height:300px">
+    </div>
+    <div id="IncomTreatchartContainer" style="width:595px;height:300px">
+    </div>
+    <div id="CompTreatchartContainer" style="width:595px;height:300px">
+    </div>
+</body>
+</html>

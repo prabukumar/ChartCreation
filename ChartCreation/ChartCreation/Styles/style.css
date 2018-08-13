@@ -1,0 +1,178 @@
+.Welcome-text {
+    height: 100px;
+    color: blue;
+    position: relative;
+    -webkit-animation: mymove 3s;  /* Safari 4.0 - 8.0 */
+    -webkit-animation-fill-mode: forwards; /* Safari 4.0 - 8.0 */
+    animation: mymove 3s;
+    animation-fill-mode: forwards;
+	text-align: center;
+    font-size: 10em;
+	font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes mymove {
+    from {top: 0px;}
+    to {top: 200px; color: black;}
+}
+
+@keyframes mymove {
+    from {top: 0px;}
+    to {top: 200px; color:black;}
+}
+.test {
+	height: 100%;
+	background-repeat: no-repeat;
+    margin: 0;
+	opacity:.1;
+    filter: alpha(opacity=50);
+	 margin: auto;
+    width: 50%;
+	z-index:-1;
+    padding: 10px;
+	
+    
+}
+.test_logo{
+	margin-top: -9%;
+    text-align: center;
+}
+.first_logo{
+	margin-top: -3%;
+   
+}
+.search_bar{
+	float: right;
+    margin-top: 5px;
+}
+table th td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+.margin-35{
+	margin-top: -35%
+}
+.button-group{
+	margin-top: -10%
+}
+.margin-top-1{
+	margin-top: -1%
+}
+.margin-top-7{
+	margin-top: 7%
+}
+.margin-bottom-2{
+	margin-bottom: 2%
+}
+.margin-top-3{
+	margin-top: 3%
+}
+a#nav-button{
+	width: 75px;
+    -webkit-transition: width 1s; /* For Safari 3.1 to 6.0 */
+    transition: width 1s;
+}
+a:hover#nav-button  {
+    width: 120px;
+}
+body > nav > ul > li > a{
+	color: #87bdf7e8;
+}
+body > nav > ul > li > a:hover{
+	color: #fff;
+}
+.nav-padding{
+	padding:0px !important;
+	padding-left:15px !important;
+	padding-top:6px !important;
+
+	}
+.button{
+  outline: none;
+  color: #fff;
+	-webkit-box-shadow: inset 0px 0px 3px 1px rgba(3, 51, 110, 0.75);
+	-moz-box-shadow: inset 0px 0px 3px 1px rgba(3, 51, 110, 0.75);
+	box-shadow: none;
+	background: -moz-linear-gradient(270deg, rgba(122,153,245,1) 0%, rgba(8,114,201,1) 48%, rgba(6,84,148,1) 50%, rgba(164,221,245,1) 100%); /* ff3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(122,153,245,1)), color-stop(48%, rgba(8,114,201,1)), color-stop(50%, rgba(6,84,148,1)), color-stop(100%, rgba(164,221,245,1))); /* safari4+,chrome */
+	background: -webkit-linear-gradient(270deg, rgba(122,153,245,1) 0%, rgba(8,114,201,1) 48%, rgba(6,84,148,1) 50%, rgba(164,221,245,1) 100%); /* safari5.1+,chrome10+ */
+	background: -o-linear-gradient(270deg, rgba(122,153,245,1) 0%, rgba(8,114,201,1) 48%, rgba(6,84,148,1) 50%, rgba(164,221,245,1) 100%); /* opera 11.10+ */
+	background: -ms-linear-gradient(270deg, rgba(122,153,245,1) 0%, rgba(8,114,201,1) 48%, rgba(6,84,148,1) 50%, rgba(164,221,245,1) 100%); /* ie10+ */
+	background: linear-gradient(180deg, rgba(122,153,245,1) 0%, rgba(8,114,201,1) 48%, rgba(6,84,148,1) 50%, rgba(164,221,245,1) 100%); /* w3c */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7A99F5', endColorstr='#A4DDF5',GradientType=0 ); /* ie6-9 */
+	border-radius: 10px;
+	top: -1px;
+	padding: 3px 35px;
+    cursor: pointer;
+    font-weight: bold;
+	
+}
+body > nav > div > ul > li.active a{
+background-color: rgba(255, 255, 255, -0.6)!important;
+}
+.navbar-inverse .navbar-nav>li>a {
+    color: #fff8;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+.drag_align{
+    margin-top: -28%;
+}
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    right: 105%;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}	
+.zoom {
+    transition: transform .2s;
+    margin: 0 auto;
+}
+
+.zoom:hover {
+    -ms-transform: scale(1.5); /* IE 9 */
+    -webkit-transform: scale(1.5); /* Safari 3-8 */
+    transform: scale(1.5); 
+}

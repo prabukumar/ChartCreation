@@ -1,0 +1,379 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Fipsar Demo</title>
+    <title>Dynamic Table</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="Styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <style>
+
+        button {
+            border-radius: 10px;
+            height: 45px;
+            width: 150px;
+            text-align: center;
+            background-color: #FFEBCD;
+            font-size: 15px;
+            color: #ffffed;
+        }
+
+        input {
+            height: 35px;
+            font-size: 15px;
+        }
+
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+            width: 100%;
+            background-color: #FFEBCD;
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            text-align: center;
+            padding: 15px;
+            font-size: 20px;
+        }
+
+        th {
+            background-color: #BC8F8F;
+            color: white;
+            font-style: bold;
+            font-size: 35px;
+        }
+        table thead {
+            display: table-header-group;
+        }
+    </style>
+    <script>
+        //JSON Object................
+
+        var json_obj = {
+            "name": "John",
+            "age": 30,
+            "cars": [
+                { "name": "Sagar", "models": ["Fiesta", "Focus", "Mustang"] },
+                { "name": "Faviola", "models": ["320", "X3", "X5"] },
+                { "name": "john", "models": ["500", "Panda", "550"] },
+                 { "name": "john", "models": ["500", "Panda", "550"] },
+                  { "name": "john", "models": ["500", "Panda", "550"] },
+                   { "name": "john", "models": ["500", "Panda", "550"] },
+                    { "name": "john", "models": ["500", "Panda", "550"] },
+                     { "name": "john", "models": ["500", "Panda", "550"] },
+                      { "name": "john", "models": ["500", "asd", "550"] },
+                { "name": "asdsa", "models": ["500", "asd", "550"] },
+                { "name": "jasdsaohn", "models": ["500", "sad", "550"] }
+            ]
+        }
+        //JSON Object End................
+        //Create table and fetch data from JSON Object.
+        $(document).ready(function () {
+
+
+            // for search function only
+        });
+    </script>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+    <script src="Scripts/html2canvas.js"></script>
+    <script src="Scripts/jspdf.min.js"></script>
+    <script>
+        function componentDidMount(charttype) {
+
+            document.getElementById("chartCon").style.display = "none";
+            document.getElementById("only-graph").style.display = "block";
+            CanvasJS.addColorSet("greenShades",
+                [
+                    "#2F4F4F",
+                    "#008080",
+                    "#2E8B57",
+                    "#3CB371",
+                    "#90EE90"
+                ]);
+
+            //var c = charttype;
+            var chart = new CanvasJS.Chart("only-graph", {
+                colorSet: "greenShades", backgroundColor: "transparent", animationEnabled: true,
+                title: {
+                    text: "Disease status report"
+                },
+                data: [
+                    {
+                        //type = "table",
+                        dataPoints: [
+                            { label: "Malaria", y: 18 },
+                            { label: "Chicken pox", y: 29 },
+                            { label: "Rabies", y: 40 },
+                            { label: "Dengue", y: 34 },
+                            { label: "Chikungunya", y: 24 }
+                        ]
+                    }
+                ]
+            });
+            chart.options.data[0].type = charttype;
+            chart.render();
+
+        }
+        function generatePDF() {
+            var divId2Download;     
+            if (document.getElementById("chartCon").style.display == "block") {
+                divId2Download = "chartCon";
+                //generatetableTopdf(divId2Download)
+                createPDF(divId2Download)
+            }
+            else if (document.getElementById("only-graph").style.display == "block") {
+                divId2Download = "only-graph";
+                generateChartTOPdf(divId2Download)
+            }
+        }
+        function generateChartTOPdf(divId) {
+            html2canvas(document.getElementById(divId), {
+                onrendered: function (canvas) {
+                    var img = canvas.toDataURL("image/png");
+                    var doc = new jsPDF();
+                    doc.addImage(img, 'JPEG', 20, 20);
+                    doc.save('testcanvas.pdf');
+                }
+            });
+        }
+        function generatetableTopdf(divId) {
+            var pdf = new jsPDF('p', 'pt', 'letter');
+            var pdf_name = 'tableTopdf.pdf';
+            htmlsource = $('#' + divId)[0];
+            specialElementHandlers = {
+                '#bypassme': function (element, renderer) {
+                    return true
+                }
+            };
+            margins = {
+                top: 80,
+                bottom: 60,
+                left: 40,
+                width: 522
+            };
+            pdf.fromHTML(
+                htmlsource,
+                margins.left,
+                margins.top, {
+                    'width': margins.width,
+                    'elementHandlers': specialElementHandlers
+                },
+                function (dispose) {
+                    pdf.save(pdf_name);
+                }, margins);
+        }
+    </script>
+    <script>
+        function showtable() {
+            document.getElementById("chartCon").style.display = "block";
+            document.getElementById("only-graph").style.display = "none";
+            var number_of_rows = json_obj.cars.length;
+            var k = 0;
+            var table_body = '<table border="1" id="example"><thead><tr><th>Cars</th><th>Models</th></tr></thead><tbody>';
+
+
+
+            for (j in json_obj.cars) {
+                for (i = 0; i < json_obj.cars.length; i++) {
+                    table_body += '<tr>';
+                    table_body += '<td>';
+                    table_body += json_obj.cars[k]["name"];
+                    table_body += '</td>';
+
+                    table_body += '<td>';
+                    table_body += json_obj.cars[k].models[i];
+                    table_body += '</td>';
+
+                    table_body += '</tr>';
+                }
+                k++;
+            }
+            table_body += '</tbody></table>';
+            $('#tableDiv').html(table_body);// ***//
+            //document.getElementById("loginTable").style.display="table";
+
+        }
+
+    </script>
+    <script>
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+        function drag(ev, chart) {
+            ev.dataTransfer.setData("chart", chart);
+
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var chartType = ev.dataTransfer.getData("chart");
+            componentDidMount(chartType);
+            //ev.target.appendChild(document.getElementById(data));
+        }
+
+        function generatetable() {
+            document.getElementById("chartCon").style.display = "block";
+            document.getElementById("only-graph").style.display = "none";
+            var number_of_rows = json_obj.cars.length;
+            var k = 0;
+            var table_body = '<table border="1" id="example"><thead><tr><th>Cars</th><th>Models</th></tr></thead><tbody>';
+
+
+
+            for (j in json_obj.cars) {
+                for (i = 0; i < json_obj.cars.length; i++) {
+                    table_body += '<tr>';
+                    table_body += '<td>';
+                    table_body += json_obj.cars[k]["name"];
+                    table_body += '</td>';
+
+                    table_body += '<td>';
+                    table_body += json_obj.cars[k].models[i];
+                    table_body += '</td>';
+
+                    table_body += '</tr>';
+                }
+                k++;
+            }
+            table_body += '</tbody></table>';
+            $('#Table_display').html(table_body);// ***//
+        }
+        $(document).ready(function () {
+            $("#search").on("keyup", function () {
+                var value = $(this).val().toLowerCase(); // ***//
+                $("table tr").filter(function (index) {
+                    if (index > 0) {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        function createPDF(divId) {
+            var sTable = document.getElementById(divId).innerHTML;
+
+            var style = "<style>";
+            style = style + "table {width: 100%;font: 17px Calibri;}";
+            style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+            style = style + "padding: 2px 3px;text-align: center;}";
+            style = style + "</style>";
+
+            // CREATE A WINDOW OBJECT.
+            var win = window.open('', '', 'height=700,width=700');
+
+            win.document.write('<html><head>');
+            win.document.write('<title>Profile</title>');   // <title> FOR PDF HEADER.
+            win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+            win.document.write('</head>');
+            win.document.write('<body>');
+            win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+            win.document.write('</body></html>');
+
+            win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+
+            win.print();    // PRINT THE CONTENTS.
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-light button">
+        <div class="navbar-header">
+            <a class="navbar-brand first_logo" href="demo.html"><img src="./image/first.png" /></a>
+        </div>
+        <ul class="navbar-nav margin-top-1" id="nav-button">
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="demo.html">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 1</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 2</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 3</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 4</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 5</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 6</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 7</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 8</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button" href="table.html">Page 9</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-button nav-padding" href="ChartCreation.html">Page 10</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="test_logo">
+        <img src="image/test.png" class="test margin-top-7" />
+        <div class="row" ondrop="drop(event)" ondragover="allowDrop(event,'componentDidMount')" style="height:auto">
+            <div class="col-md-2">&nbsp;</div>
+            <div class="col-md-8 margin-35">
+                <div class="row">
+                    <div class="col-md-12" id="chartCon">
+                        <div class="row">
+                            <div class="col-md-2 margin-bottom-2">
+                                <strong>Filter here:</strong>
+                            </div>
+                            <div class="col-md-3 margin-bottom-2">
+                                <form>
+                                    <input class="form-control" id="search" type="text" placeholder="Search..">
+                                </form>
+                            </div>
+                            <div class="col-md-7">&nbsp;</div>
+                        </div>
+                        <div id="Table_display">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="only-graph" style="height: 300px; width: 595px;margin:0 auto"></div>
+                </div>
+            </div>
+            <div class="col-md-2 drag_align">
+                <button class="btn btn-primary button " id="piechartchange" draggable="true" ondragstart="drag(event,'pie')" data-toggle="tooltip" data-placement="left" title="Move center to view"><i class="fa fa-pie-chart zoom"></i></button>
+                <br>
+                <button class="btn btn-primary button margin-top-3" id="DoughnutChartChange" draggable="true" ondragstart="drag(event,'doughnut')" data-toggle="tooltip" data-placement="left" title="Move center to view"><i class="fa fa-dot-circle-o zoom" aria-hidden="true"></i></button>
+                <br>
+                <button class="btn btn-primary button margin-top-3" id="columnChartChange" draggable="true" ondragstart="drag(event,'column')" data-toggle="tooltip" data-placement="left" title="Move center to view"><i class="fa fa-bar-chart zoom"></i></button>
+                <br>
+                <button class="btn btn-primary button margin-top-3" id="AreaChartChange" draggable="true" ondragstart="drag(event,'area')" data-toggle="tooltip" data-placement="left" title="Move center to view"><i class="fa fa-area-chart zoom"></i></button>
+                <br>
+            </div>
+        </div>
+        <div class="container ">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary button" onclick="generatetable()">TABLE</button>
+                <button type="button" class="btn btn-primary button" onclick="generatePDF()">PDF</button>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="Styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="Scripts/html2canvas.js"></script>
+    <script src="Scripts/jspdf.min.js"></script>
+    <script>
+        function generatetableTopdf() {
+            var divId = "PatientTable"
+            var pdf = new jsPDF('p', 'pt', 'letter');
+            var pdf_name = 'tableTopdf.pdf';
+            htmlsource = $('#' + divId)[0];
+
+            specialElementHandlers = {
+                '#bypassme': function (element, renderer) {
+                    return true
+                }
+            };
+            margins = {
+                top: 80,
+                bottom: 60,
+                left: 40,
+                width: 522
+            };
+
+            pdf.fromHTML(
+                htmlsource,
+                margins.left,
+                margins.top, {
+                    'width': margins.width,
+                    'elementHandlers': specialElementHandlers
+                },
+
+                function (dispose) {
+
+                    pdf.save(pdf_name);
+                }, margins);
+        }
+        function createPDF() {
+            var sTable = document.getElementById('PatientTable').innerHTML;
+
+            var style = "<style>";
+            style = style + "table {width: 100%;font: 17px Calibri;}";
+            style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+            style = style + "padding: 2px 3px;text-align: center;}";
+            style = style + "</style>";
+
+            // CREATE A WINDOW OBJECT.
+            var win = window.open('', '', 'height=700,width=700');
+
+            win.document.write('<html><head>');
+            win.document.write('<title>Profile</title>');   // <title> FOR PDF HEADER.
+            win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+            win.document.write('</head>');
+            win.document.write('<body>');
+            win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+            win.document.write('</body></html>');
+
+            win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+
+            win.print();    // PRINT THE CONTENTS.
+        }
+    </script>
+</head>
+<body>
+    <div id="PatientTable">
+        <table style="border: 3px solid black" id="loginTable" class="table table-bordered table-striped ">
+            <thead>
+                <tr style="border: 3px solid black">
+                    <th style="border: 3px solid black">Firstname</th>
+                    <th style="border: 3px solid black">Lastname</th>
+                    <th style="border: 3px solid black"> Email</th>
+                    <th style="border: 3px solid black"> Age</th>
+                    <th style="border: 3px solid black"> Native</th>
+                    <th style="border: 3px solid black"> State</th>
+                </tr>
+            </thead>
+            <tbody id="myTable">
+                <tr style="border: 3px solid black">
+                    <td style="border: 3px solid black">John</td>
+                    <td style="border: 3px solid black">Doe</td>
+                    <td style="border: 3px solid black">john@example.com</td>
+                    <td style="border: 3px solid black">34</td>
+                    <td style="border: 3px solid black">ms</td>
+                    <td style="border: 3px solid black">TN</td>
+                </tr>
+                <tr>
+                    <td style="border: 3px solid black">Mary</td>
+                    <td style="border: 3px solid black">Moe</td>
+                    <td style="border: 3px solid black">mary@mail.com</td>
+                    <td style="border: 3px solid black">23</td>
+                    <td style="border: 3px solid black">cape</td>
+                    <td style="border: 3px solid black">KL</td>
+                </tr>
+                <tr>
+                    <td style="border: 3px solid black">July</td>
+                    <td style="border: 3px solid black">Dooley</td>
+                    <td style="border: 3px solid black">july@greatstuff.com</td>
+                    <td style="border: 3px solid black">34</td>
+                    <td style="border: 3px solid black">ncj</td>
+                    <td style="border: 3px solid black">KA</td>
+                </tr>
+                <tr>
+                    <td style="border: 3px solid black">Anja</td>
+                    <td style="border: 3px solid black">Ravendale</td>
+                    <td style="border: 3px solid black">a_r@test.com</td>
+                    <td style="border: 3px solid black">34</td>
+                    <td style="border: 3px solid black">kk</td>
+                    <td style="border: 3px solid black">AP</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <button id="btnPdf" onclick="createPDF()">Generate PDF</button>
+    </div>
+</body>
+</html>
